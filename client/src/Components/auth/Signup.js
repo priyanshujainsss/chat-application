@@ -11,7 +11,9 @@ const Signup = () => {
     const history=useHistory();
     const handleSubmit=(e)=>{
        e.preventDefault();
-      axios.post("http://localhost:5000/signups",{name,email,password})
+      // axios.post("http://localhost:5000/signups",{name,email,password})
+      axios.post("http://sourcechat.com/signups",{name,email,password})
+
       .then(response=>{console.log(response)
      history.push(("/login"))
     })

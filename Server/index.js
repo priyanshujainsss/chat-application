@@ -28,8 +28,20 @@ mongoose.connect(
   );
   app.use(express.json())
   app.use(cookieParser())
-  app.use(cors({credentials:true,origin:"http://localhost:3000"}));
-  app.use(authRoutes);
+  app.use(cors({origin:"http://localhost:3000",
+  credentials:true  // credentials used for set and get cookies in header
+ }));
+  // app.use(cors({credentials:true}));
+
+ app.use(authRoutes);
+ app.get("/home",(req,res)=>{
+   res.send("Server is running...................")
+ })
+ app.get("/about",(req,res)=>{
+   res.send("About page running.......................")
+ })
+
+
 app.get("/setcookie",(req,res)=>{
   res.cookie("jwt","token");
   res.send("cookies are set")
@@ -90,5 +102,5 @@ io.on("connection", async (socket) => {
 });
 
 http.listen(PORT, () => {
-  console.log(`Listeing on ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

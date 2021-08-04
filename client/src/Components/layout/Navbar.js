@@ -10,14 +10,14 @@ const Navbar = () => {
   const logout = async () => {
     console.log("logout called");
     try {
-      const res = await axios.get("http://localhost:5000/logout", {
-        withCredentials: true,
-      });
-      setUser(null);
-      setCookie('userId', "", { path: '/', maxAge:1});
-      setCookie('userName', "", { path: '/', maxAge:1});
-
+      sessionStorage.clear();
+      const res = await axios.get("http://soucechat.com/logout"
+      // , {
+      //   withCredentials: true,
+      // }
+      );
       console.log(res);
+      setUser(null);
     } catch (err) {
       console.log({ err });
     }
@@ -36,7 +36,7 @@ const Navbar = () => {
           <ul className="right hide-on-med-and-down">
             {user ? (
               <li>
-                <a href="/login" onClick={logout}>
+                <a href="/" onClick={logout}>
                   Logout
                 </a>
               </li>
@@ -57,7 +57,7 @@ const Navbar = () => {
       <ul className="sidenav" id="mobile-demo">
         {user ? (
           <li>
-            <a href="/login" onClick={logout}>
+            <a href="/" onClick={logout}>
               Logout
             </a>
           </li>

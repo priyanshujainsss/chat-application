@@ -8,19 +8,27 @@ import Navbar from './Components/layout/Navbar';
 import Login from "./Components/auth/Login";
 import Signup from "./Components/auth/Signup";
 import axios from 'axios';
-import {CookiesProvider,useCookies} from "react-cookie"
+// import {CookiesProvider} from "react-cookie"
+// const headers={
+//   "Acces-Control-Allow-Origin":"http://localhost:5000",
+//   withCredentials:true
+// }
 function App() {
   const [user,setUser]=useState(null);
-  const [cookies, setCookie] = useCookies(['user']);
+  // const [cookies, setCookie] = useCookies(['user']);
   useEffect(() => {
     const verifyuser=async()=>{
       try{
-        const res=await axios.get("http://localhost:5000/verifyuser",{withCredentials:true})
-        console.log(res)
-        setUser(res.data)
-      setCookie('userId', res.data._id, { path: '/'});
-      setCookie('userName', res.data.name, { path: '/' });
+        // const res=await axios.get("http://localhost:5000/verifyuser",{
+          console.log("session token value",sessionStorage.getItem("id"))
+        const res=await axios.post("http://sourcechat.com/verifyuser",{id:sessionStorage.getItem("id")},{         
+        withCredentials:true // withCredentials used for cookies 
 
+        })
+        console.log(res);
+        sessionStorage.setItem("id",res.data._id);
+        sessionStorage.setItem("name",res.data.name)
+        setUser(res.data)
       }
       catch(err){
         console.log(err)
@@ -34,15 +42,13 @@ function App() {
     <Router>
     <div className="App">
      <UserContext.Provider value={{user,setUser}}>
-       <CookiesProvider>
        <Navbar />
        <Switch>
          <Route exact path="/" component={Home} />
-         <Route  path="/chat/:room_id/:room_name/" component={Chat}/>
+         <Route path="/chat/:room_id/:room_name/" component={Chat} />
          <Route exact path="/login" component={Login} />
          <Route eaxct path="/signup" component={Signup} />
        </Switch>
-       </CookiesProvider>
      </UserContext.Provider>
 
 

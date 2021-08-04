@@ -41,17 +41,17 @@ const login = async(req, res) => {
     if(email && password)
   {try{
    const find=await User.find({email})
-   console.log("find on login",find[0]._id)
    if(find.length === 0) return res.send("Invalid credentials")
  const validpassword=await bcrypt.compare(password,find[0].password)
 if(validpassword){
        const token=createToken(find[0]._id);
        console.log(find[0]._id)
+
        res.cookie("id",find[0]._id,{
+         maxAge:maxAge*1000,
          httpOnly:true,
-         secure:true,
-         maxAge:maxAge*1000
-       });
+       })
+
        res.status(200).json({msg:"User login successfully",find})
    }else{
 
@@ -70,6 +70,8 @@ const verifyuser=async(req,res,next)=>{
   const token=req.cookies.id;
   if(token){
     const find=await User.findById(token);
+    res.cookie("Id",find._id)
+    res.cookie("name",find.name);
     console.log("find",find)
     res.json(find)
   }

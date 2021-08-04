@@ -2,17 +2,30 @@ import React, { useState,useContext } from 'react'
 import {Redirect} from "react-router-dom"
 import axios from "axios";
 import { UserContext } from '../../UserContext';
+
+// const headers={
+//   "Acces-Control-Allow-Origin":"http://localhost:5000",
+//    withCredentials:true
+// }
 const Login = () => {
   const { user, setUser } = useContext(UserContext);
     const[email,setemail]=useState("");
     const [password,setpassword]=useState("")
     const[passworderror,setpassworderror]=useState("");   
-    
+
     const [emailerror,setemailerror]=useState("")
     // const history=useHistory();
     const handleSubmit=(e)=>{
         e.preventDefault();
-        axios.post("http://localhost:5000/login",{email,password},{withCredentials:true})
+        // axios.post("http://localhost:5000/login",{email,password},
+        axios.post("http://sourcechat.com/login",{email,password},
+                 
+
+        {
+          "withCredentials":true}  //withCredentials used for set cookies in header
+        )
+     
+
         .then(response=>{console.log("response",response)
         if(response.status === 201){
             setemailerror(response.data);
@@ -23,7 +36,10 @@ const Login = () => {
             setemailerror("");
             setpassworderror("");
             setUser(response.data.find[0]);
-            window.location.reload();
+            sessionStorage.setItem("id",response.data.find[0]._id);
+            console.log(response.data.find[0])
+
+            
         }
      })
         .catch(err=>{console.log({err})

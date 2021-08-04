@@ -4,9 +4,10 @@ import Roomlist from "./Roomlist";
 import io from "socket.io-client";
 import { Redirect } from "react-router-dom";
 let socket;
+
 const Home = () => {
-  let ENDPT = "http://localhost:5000/"; 
-  const { user, setUser } = useContext(UserContext);
+  let ENDPT = "http://localhost:5000"; 
+  const {user} = useContext(UserContext);
   const [room, setroom] = useState("");
   const [rooms,setrooms]=useState([]);
   useEffect(() => {
@@ -22,19 +23,19 @@ const Home = () => {
     socket.on("output-rooms",rooms=>{
       console.log("rooms",rooms)
       setrooms(rooms)
-      console.log(rooms)
+      console.log("rooms",rooms)
     })
     
-  }, [rooms])
+  }, [])
   useEffect(() => {
     socket.on("room-created",saved=>{
       console.log("data from db",saved)
     })
    
-    console.log(user)
+    console.log({user})
     // localStorage.setItem("name",user.name);
     // localStorage.setItem("id",user._id);
-  }, [])
+  }, [rooms])
 
 
   const handleSubmit = (e) => {
